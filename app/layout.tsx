@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
+import Providers from "@/lib/providers";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 
@@ -18,12 +19,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
-      <body className="bg-background text-foreground">
-        <main className="min-h-screen flex flex-col items-center">
-          {children}
-        </main>
-        <Toaster />
+    <html lang="en" className={`${GeistSans.className} h-full`}>
+      <body className="bg-background text-foreground h-full">
+        <Providers>
+          <main className="min-h-screen flex flex-col items-center">
+            {children}
+          </main>
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
