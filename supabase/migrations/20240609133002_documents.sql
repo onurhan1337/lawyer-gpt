@@ -24,13 +24,6 @@ create table document_sections (
   embedding vector (384)
 );
 
-alter table document_sections
-drop constraint document_sections_document_id_fkey,
-add constraint document_sections_document_id_fkey
-  foreign key (document_id)
-  references documents(id)
-  on delete cascade;
-
 create index on document_sections using hnsw (embedding vector_ip_ops);
 
 alter table documents enable row level security;
