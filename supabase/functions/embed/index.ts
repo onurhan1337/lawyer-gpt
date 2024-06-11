@@ -2,10 +2,11 @@
 /// <reference types="https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts" />
 
 import { createClient } from "@supabase/supabase-js";
+import { Database } from "../_lib/database.ts";
 
+// @ts-ignore TODO: Support Supabase AI types.
 const model = new Supabase.ai.Session("gte-small");
 
-// These are automatically injected
 const supabaseUrl = Deno.env.get("SUPABASE_URL");
 const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
 
@@ -18,7 +19,7 @@ Deno.serve(async (req) => {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   }
 
@@ -26,17 +27,15 @@ Deno.serve(async (req) => {
 
   if (!authorization) {
     return new Response(
-      JSON.stringify({
-        error: "No authorization header passed",
-      }),
+      JSON.stringify({ error: `No authorization header passed` }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   }
 
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     global: {
       headers: {
         authorization,
@@ -51,20 +50,15 @@ Deno.serve(async (req) => {
 
   const { data: rows, error: selectError } = await supabase
     .from(table)
-    .select(`id, ${contentColumn}` as `*`)
+    .select(`id, ${contentColumn}` as "*")
     .in("id", ids)
     .is(embeddingColumn, null);
 
   if (selectError) {
-    return new Response(
-      JSON.stringify({
-        error: selectError,
-      }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      },
-    );
+    return new Response(JSON.stringify({ error: selectError }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   for (const row of rows) {
@@ -84,24 +78,24 @@ Deno.serve(async (req) => {
 
     const { error } = await supabase
       .from(table)
-      .update({ [embeddingColumn]: embedding })
+      .update({
+        [embeddingColumn]: embedding,
+      })
       .eq("id", id);
 
     if (error) {
       console.error(
-        `Failed to save embedding on '${table}' table with id ${id}`,
+        `Failed to save embedding on '${table}' table with id ${id}`
       );
     }
 
     console.log(
-      `Generated embedding ${
-        JSON.stringify({
-          table,
-          id,
-          contentColumn,
-          embeddingColumn,
-        })
-      }`,
+      `Generated embedding ${JSON.stringify({
+        table,
+        id,
+        contentColumn,
+        embeddingColumn,
+      })}`
     );
   }
 
