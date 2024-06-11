@@ -1,13 +1,19 @@
-import { Pipeline, PipelineType, PretrainedOptions, Tensor } from '@xenova/transformers';
-import { useEffect, useState } from 'react';
+import { Pipeline, PretrainedOptions, Tensor } from "@xenova/transformers";
+import { useEffect, useState } from "react";
 import {
   InitEventData,
   OutgoingEventData,
   RunEventData,
-} from '../workers/pipeline';
+} from "../workers/pipeline";
 
-export type PipeParameters = Parameters<Pipeline['_call']>;
-export type PipeReturnType = Awaited<ReturnType<Pipeline['_call']>>;
+export type PipelineType =
+  | "text-classification"
+  | "token-classification"
+  | "question-answering"
+  | "feature-extraction";
+
+export type PipeParameters = Parameters<Pipeline["_call"]>;
+export type PipeReturnType = Awaited<ReturnType<Pipeline["_call"]>>;
 export type PipeFunction = (...args: PipeParameters) => Promise<PipeReturnType>;
 
 /**
@@ -34,9 +40,9 @@ export function usePipeline(
     const { progress_callback, ...transferableOptions } = options ?? {};
 
     const worker = new Worker(
-      new URL('../workers/pipeline.ts', import.meta.url),
+      new URL("../workers/pipeline.ts", import.meta.url),
       {
-        type: 'module',
+        type: "module",
       }
     );
 
@@ -44,27 +50,27 @@ export function usePipeline(
       const { type } = e.data;
 
       switch (type) {
-        case 'progress': {
+        case "progress": {
           const { data } = e.data;
           progress_callback?.(data);
           break;
         }
-        case 'ready': {
+        case "ready": {
           setWorker(worker);
           break;
         }
       }
     };
 
-    worker.addEventListener('message', onMessageReceived);
+    worker.addEventListener("message", onMessageReceived);
 
     worker.postMessage({
-      type: 'init',
+      type: "init",
       args: [task, model, transferableOptions],
     } satisfies InitEventData);
 
     return () => {
-      worker.removeEventListener('message', onMessageReceived);
+      worker.removeEventListener("message", onMessageReceived);
       worker.terminate();
 
       setWorker(undefined);
@@ -85,7 +91,7 @@ export function usePipeline(
 
     const onMessageReceived = (e: MessageEvent<OutgoingEventData>) => {
       switch (e.data.type) {
-        case 'result':
+        case "result":
           const { id, data: serializedData } = e.data;
           const { type, data, dims } = serializedData;
           const output = new Tensor(type, data, dims);
@@ -100,25 +106,25 @@ export function usePipeline(
       }
     };
 
-    worker.addEventListener('message', onMessageReceived);
+    worker.addEventListener("message", onMessageReceived);
 
     const pipe: PipeFunction = (...args) => {
       if (!worker) {
-        throw new Error('Worker unavailable');
+        throw new Error("Worker unavailable");
       }
 
       const id = currentId++;
 
       return new Promise<PipeReturnType>((resolve) => {
         callbacks.set(id, resolve);
-        worker.postMessage({ type: 'run', id, args } satisfies RunEventData);
+        worker.postMessage({ type: "run", id, args } satisfies RunEventData);
       });
     };
 
     setPipe(() => pipe);
 
     return () => {
-      worker?.removeEventListener('message', onMessageReceived);
+      worker?.removeEventListener("message", onMessageReceived);
       setPipe(undefined);
     };
   }, [worker]);
