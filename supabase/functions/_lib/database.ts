@@ -139,6 +139,18 @@ export type Database = {
       }
     }
     Functions: {
+      match_document_sections: {
+        Args: {
+          embedding: string
+          match_threshold: number
+        }
+        Returns: {
+          content: string
+          document_id: number
+          embedding: string | null
+          id: number
+        }[]
+      }
       supabase_url: {
         Args: Record<PropertyKey, never>
         Returns: string
