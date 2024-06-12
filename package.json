@@ -19,11 +19,12 @@
     "autoprefixer": "10.4.15",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "eslint-config-next": "^14.2.4",
     "lucide-react": "^0.284.0",
-    "next": "latest",
+    "next": "^14.2.4",
     "postcss": "8.4.29",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
@@ -32,8 +33,8 @@
   },
   "devDependencies": {
     "@types/node": "20.3.1",
-    "@types/react": "18.2.12",
-    "@types/react-dom": "18.2.5",
+    "@types/react": "^18.2.12",
+    "@types/react-dom": "^18.3.0",
     "encoding": "^0.1.13",
     "supabase": "^1.163.2"
   }
