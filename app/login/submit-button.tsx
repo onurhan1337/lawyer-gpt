@@ -1,7 +1,7 @@
 "use client";
 
 import { type ComponentProps } from "react";
-import { experimental_useFormStatus as useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 
 type Props = ComponentProps<"button"> & {
   pendingText?: string;
