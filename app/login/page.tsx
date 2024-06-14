@@ -80,7 +80,9 @@ export default function Login({
         </label>
         <input
           className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          id="email"
           name="email"
+          type="email"
           placeholder="you@example.com"
           required
         />
@@ -89,9 +91,10 @@ export default function Login({
         </label>
         <input
           className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          id="password"
           type="password"
           name="password"
-          placeholder="••••••••"
+          placeholder="******"
           required
         />
         <SubmitButton
