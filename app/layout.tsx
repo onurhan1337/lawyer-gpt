@@ -1,8 +1,7 @@
 import LogoutButton from "@/components/LogoutButton";
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/lib/providers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { PropsWithChildren } from "react";
 import "three-dots/dist/three-dots.css";
@@ -14,10 +13,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
-  // Keep cookies in the JS execution context for Next.js build
-  const cookieStore = cookies();
-
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  const supabase = createClient();
 
   const {
     data: { user },

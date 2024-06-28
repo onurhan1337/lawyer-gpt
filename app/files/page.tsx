@@ -2,12 +2,12 @@
 
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@/utils/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export default function FilesPage() {
-  const supabase = createClientComponentClient();
+  const supabase = createClient();
   const router = useRouter();
 
   const { data: documents } = useQuery({

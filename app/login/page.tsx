@@ -1,12 +1,8 @@
+import { login } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { login } from "./actions";
 
-export default function Login({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
+export default async function Login() {
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
       <Link
@@ -59,11 +55,6 @@ export default function Login({
         <Button formAction={login} className="h-10">
           Sign In
         </Button>
-        {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
-          </p>
-        )}
       </form>
     </div>
   );

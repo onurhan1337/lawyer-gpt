@@ -1,10 +1,8 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
 export default async function Index() {
-  const cookeStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookeStore });
+  const supabase = createClient();
 
   const {
     data: { user },
