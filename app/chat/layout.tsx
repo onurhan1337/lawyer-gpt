@@ -1,18 +1,17 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { PropsWithChildren } from "react";
 
-export default async function ChatLayout({ children }: PropsWithChildren) {
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+import { createClient } from "@/utils/supabase/server";
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default async function ChatLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const supabase = createClient();
 
-  if (!user) {
-    return redirect("/login");
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data?.user) {
+    redirect("/login");
   }
 
   return <>{children}</>;
