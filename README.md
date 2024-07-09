@@ -12,6 +12,7 @@ Lawyer-GPT is an AI-powered legal assistant designed to upload legal documents a
 - **General Text Embeddings model**: [Dnd Kit](https://huggingface.co/Supabase/gte-small)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [shadcn/ui](https://ui.shadcn.com/)
 - **Transformers**: [@xenova/transformers](https://www.npmjs.com/package/@xenova/transformers)
+- **Data fetching**: [Tanstack Query](https://tanstack.com/query/latest/docs/framework/react/overview)
 
 ## Overview
 
